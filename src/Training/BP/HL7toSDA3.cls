@@ -15,9 +15,9 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 	set tSC = $$$OK
 	try {
          //set tSC = ##class(Training.Gateway.HL7.HL7ToSDA3).GetSDA(pRequest,.tSDA)
-		 //set tSC= ##class(Training.Hub.Standalone.HL7.HL7ToSDA3).GetSDAContainer(pRequest,.tContainer)
-		 //set tSC = tContainer.ToQuickXMLStream(.tSDA)
-         //set tSC = ..SendRequestSync(..TargetConfigName,##class(Ens.StreamContainer).%New(tSDA),.pResponse)
+		 set tSC= ##class(Training.Tools.HL7toSDA3Demographics).GetSDAContainer(pRequest,.tContainer)
+		 set tSC = tContainer.ToQuickXMLStream(.tSDA)
+         set tSC = ..SendRequestSync(..TargetConfigName,##class(Ens.StreamContainer).%New(tSDA),.pResponse)
 	} catch ex {
 		set tSC = ex.AsStatus()
 	}

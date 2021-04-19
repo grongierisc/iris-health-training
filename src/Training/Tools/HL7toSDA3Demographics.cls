@@ -5,7 +5,7 @@ Class Training.Tools.HL7toSDA3Demographics Extends HS.Hub.Standalone.HL7.HL7ToSD
 ClassMethod GetTransformClass(msgType As %String, ByRef pTransformClass As %String) As %Status
 {
 	set tSC=$$$OK
-	
+
 	set pTransformClass=..OnGetTransformClass() 
 	quit:pTransformClass'=""	
 	
