@@ -32,6 +32,15 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="IPAddress">localhost</Setting>
     <Setting Target="Adapter" Name="Port">22222</Setting>
   </Item>
+  <Item Name="SDA_To_FHIR" Category="" ClassName="HS.FHIR.DTL.Util.HC.SDA3.FHIR.Process" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="FHIREndpoint">/api/fhir</Setting>
+    <Setting Target="Host" Name="FHIRMetadataSet">HL7v40 / FHIR R4 Core Specification</Setting>
+    <Setting Target="Host" Name="TargetConfigName">FHIR_Local_Operation</Setting>
+    <Setting Target="Host" Name="TraceOperations">*FULL*</Setting>
+  </Item>
+  <Item Name="HL7_To_SDA" Category="" ClassName="Training.BP.HL7ToSDA3" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="TargetConfigName">SDA_To_FHIR</Setting>
+  </Item>
 </Production>
 }
 
