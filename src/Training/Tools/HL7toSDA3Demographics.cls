@@ -32,8 +32,16 @@ ClassMethod GetTransformClass(msgType As %String, ByRef pTransformClass As %Stri
 	set:pTransformClass="Unsupported HL7 Message Type" tSC = $$$HSError($$$HSErrUnsupportedHL7MessageType,msgType)
  	if $$$ISERR(tSC) quit tSC
  	
- 	set tTransformPackage = "HS.Hub.Standalone.HL7.DTL"
- 	set pTransformClass = tTransformPackage_"."_pTransformClass
+	set tTransformPackage = "Training.Tools.DTL"
+	set tTransformClass = tTransformPackage_"."_pTransformClass
+
+	if '$$$comClassDefined(tTransformClass)
+	{
+		set tTransformPackage = "HS.Hub.Standalone.HL7.DTL"
+ 		set tTransformClass = tTransformPackage_"."_pTransformClass
+	}
+
+	set pTransformClass = tTransformClass
 	
 	quit tSC
 }
