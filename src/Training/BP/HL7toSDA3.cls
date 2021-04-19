@@ -5,18 +5,25 @@
 Class Training.BP.HL7ToSDA3 Extends Ens.BusinessProcess [ ClassType = persistent ]
 {
 
-Parameter SETTINGS = "TargetConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},TransformFile:Basic";
+Parameter SETTINGS = "TargetConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},Code";
 
 Property TargetConfigName As Ens.DataType.ConfigName [ InitialExpression = "HS.FHIR.DTL.Util.HC.SDA3.FHIR.Process" ];
+
+Property Code As %Boolean;
 
 /// Transforms an HL7 message to SDA, an internal healthcare format for InterSystems IRIS for Health.
 Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Response) As %Status
 {
 	set tSC = $$$OK
 	try {
-         //set tSC = ##class(Training.Gateway.HL7.HL7ToSDA3).GetSDA(pRequest,.tSDA)
+        if ..Code {
+          set tSC = ##class(HS.Gateway.HL7.HL7ToSDA3).GetSDA(pRequest,.tSDA)
+        }
+        else {
 		 set tSC= ##class(Training.Tools.HL7toSDA3Demographics).GetSDAContainer(pRequest,.tContainer)
 		 set tSC = tContainer.ToQuickXMLStream(.tSDA)
+        }  
+
          set tSC = ..SendRequestSync(..TargetConfigName,##class(Ens.StreamContainer).%New(tSDA),.pResponse)
 	} catch ex {
 		set tSC = ex.AsStatus()
@@ -30,6 +37,9 @@ Storage Default
 <Subscript>"HL7ToSDA3"</Subscript>
 <Value name="1">
 <Value>TargetConfigName</Value>
+</Value>
+<Value name="2">
+<Value>Code</Value>
 </Value>
 </Data>
 <DefaultData>HL7ToSDA3DefaultData</DefaultData>
