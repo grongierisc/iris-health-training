@@ -1,4 +1,4 @@
-Class Training.Tools.HL7toSDA3Full Extends HS.Gateway.HL7.HL7ToSDA3
+Class Training.Tools.HL7toSDA3Full Extends HS.Gateway.HL7.HL7ToSDA3 [ Not ProcedureBlock ]
 {
 
 ClassMethod GetSDA(pRequest As EnsLib.HL7.Message, Output pXML As %Stream.GlobalCharacter, pLogAlerts As %Boolean = 1, pObservationMode As %Boolean = 0, pMultiLineOBXCompatibilityMode As %Boolean = 0, pKeepDuplicateOBXIdentifiers As %Boolean = 0) As %Status
@@ -13,6 +13,7 @@ ClassMethod GetSDA(pRequest As EnsLib.HL7.Message, Output pXML As %Stream.Global
 
 ClassMethod SCH()
 {
+
 	$$$Find("SCH")
  	do ..write(cr_"<Appointments>")
  	do ..write(cr_"<Appointment>")
@@ -55,8 +56,8 @@ ClassMethod SCH()
  		do ..write(cr_"</Type>")
  	}
  	
- 	#; SCH-9 : AppointmentDuration
- 	#; SCH-10 : AppointmentDurationUnits
+ 	#; SCH-9 : AppointmentDuration Or AIS-7
+ 	#; SCH-10 : AppointmentDurationUnits Or AIS-8
  	#; SCH-11 : AppointmentTimingQuantity
  	#; TQ1-6 : ServiceDuration
  	#; TQ1-7 : StartDateTime
@@ -84,6 +85,16 @@ ClassMethod SCH()
 			set toTime = $$$SCHTimingQuantityEndDateTime(%occ)
 			quit  // only one
 		}
+        if durationQuantity="" {
+            // Try AIS segment
+            set segAIS = $$$Next("AIS")
+            #define AISAppointmentDuration				$$$xml($g(^||HS.Data(segAIS,7)))
+            #define AISAppointmentDurationUnitsIdentifier				$$$xml($g(^||HS.Data(segAIS,8)))
+            
+            set durationQuantity = $$$AISAppointmentDuration
+	 	    set durationUnits = $system.Util.Collation($$$AISAppointmentDurationUnitsIdentifier,6)  // ALPHAUP
+
+        }
  	}
  	if ((fromTime'="")&&(toTime="")&&($IsValidNum(durationQuantity))&&(",M,MINUTES,H,HOURS,"[(","_durationUnits_","))) {
 	 	// Calculate ToTime from FromTime and Duration
