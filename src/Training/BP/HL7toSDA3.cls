@@ -17,7 +17,7 @@ Method OnRequest(pRequest As EnsLib.HL7.Message, Output pResponse As Ens.Respons
 	set tSC = $$$OK
 	try {
         if ..Code {
-          set tSC = ##class(HS.Gateway.HL7.HL7ToSDA3).GetSDA(pRequest,.tSDA)
+          set tSC = ##class(Training.Tools.HL7toSDA3Full).GetSDA(pRequest,.tSDA)
         }
         else {
 		 set tSC= ##class(Training.Tools.HL7toSDA3Demographics).GetSDAContainer(pRequest,.tContainer)
