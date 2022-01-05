@@ -1,4 +1,4 @@
-ARG IMAGE=intersystemsdc/irishealth-community:2020.4.0.547.0-zpm
+ARG IMAGE=intersystemsdc/irishealth-community:latest
 FROM $IMAGE
 
 ARG IRIS_PASSWORD
